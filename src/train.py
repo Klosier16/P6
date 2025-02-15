@@ -5,6 +5,7 @@ from models.model import Model
 from config import image_size
 import matplotlib.pyplot as plt
 import time
+from tensorflow.keras.callbacks import EarlyStopping
 
 input_shape = (image_size[0], image_size[1], 3)
 categories_count = 3
@@ -37,6 +38,13 @@ def plot_history(history):
     plt.xlabel('Epoch')
     plt.show()
 
+# Define the EarlyStopping callback
+early_stopping = EarlyStopping(
+    monitor='val_loss',      # Monitor validation loss or accuracy
+    patience=2,              # Number of epochs with no improvement after which training will stop
+    restore_best_weights=True # Restore the model to the best weights
+)
+
 if __name__ == "__main__":
     # if you want to load your model later, you can use:
     # model = Model.load_model("name_of_your_model.keras")
@@ -45,7 +53,7 @@ if __name__ == "__main__":
     # plot_history(history)
     # 
     # Your code should change the number of epochs
-    epochs = 5
+    epochs = 10
     print('* Data preprocessing')
     train_dataset, validation_dataset, test_dataset = get_datasets()
     name = 'basic_model'
@@ -53,7 +61,7 @@ if __name__ == "__main__":
     print('* Training {} for {} epochs'.format(name, epochs))
     model = model_class(input_shape, categories_count)
     model.print_summary()
-    history = model.train_model(train_dataset, validation_dataset, epochs)
+    history = model.train_model(train_dataset, validation_dataset, epochs, callbacks=[early_stopping])
     print('* Evaluating {}'.format(name))
     model.evaluate(test_dataset)
     print('* Confusion Matrix for {}'.format(name))
