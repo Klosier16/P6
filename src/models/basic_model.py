@@ -14,27 +14,32 @@ class BasicModel(Model):
             layers.Conv2D(32, (3, 3), activation='relu'),
             layers.MaxPooling2D((2, 2)),
 
-            layers.Conv2D(64, (3, 3), activation='relu'),
-            layers.MaxPooling2D((2, 2)),
-            
-            layers.Conv2D(128, (3, 3), activation='relu'),
+            layers.Conv2D(32, (3, 3), activation='relu'),
             layers.MaxPooling2D((2, 2)),
 
-            layers.Conv2D(256, (3, 3), activation='relu'),
+            layers.Conv2D(32, (3, 3), activation='relu'),
+            layers.MaxPooling2D((2, 2)),
+            
+            layers.Conv2D(64, (3, 3), activation='relu'),
+            layers.MaxPooling2D((2, 2)),
+
+            layers.Conv2D(128, (3, 3), activation='relu'),
             layers.MaxPooling2D((2, 2)),
 
             # Flatten and Fully Connected Layer
             layers.Flatten(),
-            layers.Dense(256, activation='relu'),
+            layers.Dense(128, activation='relu'),
             layers.Dropout(0.3),
-            
+        
             # Output layer
-            layers.Dense(categories_count, activation='softmax')
+            layers.Dense(categories_count, activation='softmax'),
+   
         ])
     # Compile the model
     def _compile_model(self):
         self.model.compile(
-            optimizer=RMSprop(learning_rate=0.002),  
+            optimizer=RMSprop(learning_rate=0.0007),  
             loss='categorical_crossentropy',         
             metrics=['accuracy']                      
         )
+
